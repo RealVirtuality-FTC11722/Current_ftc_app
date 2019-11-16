@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -21,6 +22,7 @@ public class DriverMode extends LinearOpMode {
 
     //create a new robot named astroGary
     private BotConfig astroGary = new BotConfig();
+    public CRServo Paddle = null;
 
 
 
@@ -37,6 +39,7 @@ public class DriverMode extends LinearOpMode {
 
         //Use the Teleop initialization method
         astroGary.InitTele(hardwareMap);
+        Paddle = hardwareMap.get(CRServo.class, "servoPaddle");
 
 
         //Set toggle initial states
@@ -68,10 +71,11 @@ public class DriverMode extends LinearOpMode {
                     BotControls.TurnStick(this),
                     BotControls.DriveThrottle(this));
 
-            astroGary.Collecta.CollectorControl(gamepad1.a, gamepad1.y, gamepad1.x );
+            astroGary.Collecta.CollectorControl(gamepad2.a, gamepad2.y, gamepad2.x);
 
-
-           telemetry.update();
+            // .Builda.BuilderControl(this, gamepad2.right_bumper, gamepad2.right_stick_y);
+            Paddle.setPower(gamepad2.right_stick_y);
+            telemetry.update();
 
         }
 

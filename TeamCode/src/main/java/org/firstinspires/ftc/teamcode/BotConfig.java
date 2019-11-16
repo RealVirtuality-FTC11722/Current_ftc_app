@@ -11,6 +11,7 @@ public class BotConfig {
     //Add components to robot build
     MecanumDrive drive = new MecanumDrive();
     Collector Collecta = new Collector();
+    Builder Builda = new Builder();
 
     //VuMarkDecoder myVuMark = new VuMarkDecoder();
 
@@ -39,7 +40,10 @@ public class BotConfig {
 
         drive.initTele(myNewHWMap);
 
-        Collecta.initCollector(myNewHWMap);
+        Collecta.init(myNewHWMap);
+
+        Builda.init(myNewHWMap);
+
     }
 
     public void InitServos(HardwareMap myNewHWMap){

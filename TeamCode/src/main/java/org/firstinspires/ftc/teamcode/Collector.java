@@ -18,9 +18,7 @@ public class Collector {
     public DcMotor SpinnerL = null;
     public DcMotor SpinnerR = null;
 
-
-
-    double PULL_IN = 0.51;
+    double PULL_IN = 1.0;
     double SPIT_OUT = -0.3;
 
 
@@ -29,7 +27,7 @@ public class Collector {
     public Collector(){ //constructor
     }
 
-    public void initCollector(HardwareMap myNewHWMap){
+    public void init(HardwareMap myNewHWMap){
         myHWMap = myNewHWMap;
 
         //Initialize wheel motors
@@ -38,8 +36,8 @@ public class Collector {
 
         // eg: Set the drive motor directions:
         // "Reverse" the motor that runs backwards when connected directly to the battery
-        SpinnerL.setDirection(DcMotorSimple.Direction.REVERSE);
-        SpinnerR.setDirection(DcMotorSimple.Direction.FORWARD);
+        SpinnerL.setDirection(DcMotorSimple.Direction.FORWARD);
+        SpinnerR.setDirection(DcMotorSimple.Direction.REVERSE);
         SpinnerL.setPower(0);
         SpinnerR.setPower(0);
 
