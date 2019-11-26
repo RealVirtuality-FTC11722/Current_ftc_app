@@ -42,10 +42,10 @@ public class MecanumDrive {
 
         // eg: Set the drive motor directions:
         // "Reverse" the motor that runs backwards when connected directly to the battery
-        motorFL.setDirection(DcMotor.Direction.REVERSE); // Set to REVERSE if using AndyMark motors
-        motorFR.setDirection(DcMotor.Direction.FORWARD);// Set to FORWARD if using AndyMark motors
-        motorBL.setDirection(DcMotor.Direction.REVERSE); // Set to REVERSE if using AndyMark motors
-        motorBR.setDirection(DcMotor.Direction.FORWARD);// Set to FORWARD if using AndyMark motors
+        motorFL.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
+        motorFR.setDirection(DcMotor.Direction.REVERSE);// Set to FORWARD if using AndyMark motors
+        motorBL.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
+        motorBR.setDirection(DcMotor.Direction.REVERSE);// Set to FORWARD if using AndyMark motors
         motorBL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorBL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         motorBR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -69,8 +69,8 @@ public class MecanumDrive {
         // Retrieve and initialize the IMU. We expect the IMU to be attached to an I2C port
         // on a Core Device Interface Module, configured to be a sensor of type "AdaFruit IMU",
         // and named "imu".
-        //imu = myHWMap.get(BNO055IMU.class, "imu");
-        //imu.initialize(parameters);
+        imu = myHWMap.get(BNO055IMU.class, "imu");
+        imu.initialize(parameters);
     }
 
     public void initMotors(HardwareMap myNewHWMap) {
@@ -181,6 +181,29 @@ public class MecanumDrive {
         motorFL.setPower(power);
         motorFR.setPower(power);
     }
+
+    public void DriveLeft(LinearOpMode op, double power) {
+        motorFR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        motorFL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        motorBR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        motorFL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        motorBL.setPower(power);
+        motorBR.setPower(-power);
+        motorFL.setPower(-power);
+        motorFR.setPower(power);
+    }
+    public void DriveRight(LinearOpMode op, double power) {
+        motorFR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        motorFL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        motorBR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        motorFL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        motorBL.setPower(-power);
+        motorBR.setPower(power);
+        motorFL.setPower(power);
+        motorFR.setPower(-power);
+    }
+
+
     //Method for autonomous driving forward and backwards
     //distance is specified in inches (positive = drive forward, negative = drive backward)
     //timeout value is used to interrupt drive routine if robot gets stuck

@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.util.Range;
 
 
 /**
@@ -15,6 +16,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 public class Builder {
     public CRServo Paddle = null;
+    public boolean onState = false;
 
 
 
@@ -40,16 +42,13 @@ public class Builder {
     }
 
 
-    public void BuilderControl(LinearOpMode op, boolean joeButton, double joeStick){
-        ElapsedTime paddleTime = new ElapsedTime();
-        double SPIN_TIME = 2000;
-        if (joeButton){
-            paddleTime.reset();
-            while (op.opModeIsActive() || paddleTime.time() < SPIN_TIME){
-                Paddle.setPower(1);
-            }
+    public void BuilderControl(LinearOpMode op, boolean joeButton, double joeStick) {
+        if (joeButton) {
+            Paddle.setPower(-0.8);
+        } else {
+            Paddle.setPower(Range.clip(joeStick, -0.8, 0.8));
         }
-        Paddle.setPower(joeStick);
-
+        op.telemetry.addData("Paddle: ", Paddle.getPower());
+        op.telemetry.update();
     }
 }

@@ -22,7 +22,7 @@ public class DriverMode extends LinearOpMode {
 
     //create a new robot named astroGary
     private BotConfig astroGary = new BotConfig();
-    public CRServo Paddle = null;
+    //public CRServo testPaddle = null;
 
 
 
@@ -37,14 +37,15 @@ public class DriverMode extends LinearOpMode {
         telemetry.addData("Status", "Initializing. Please Wait...");
         telemetry.update();
 
+
         //Use the Teleop initialization method
         astroGary.InitTele(hardwareMap);
-        Paddle = hardwareMap.get(CRServo.class, "servoPaddle");
-
+        //testPaddle = hardwareMap.get(CRServo.class, "servoPaddle");
 
         //Set toggle initial states
         boolean rtTogglePressed = false;
         boolean rtToggleReleased = true;
+
         boolean ltTogglePressed = false;
         boolean ltToggleReleased = true;
 
@@ -64,6 +65,12 @@ public class DriverMode extends LinearOpMode {
         while (opModeIsActive()) {
             telemetry.addData("Status", "Run Time: " + runtime.toString());
 
+            //if (rtTogglePressed) {
+            //    rtToggleReleased = false;
+            //} else {
+            //    rtToggleReleased = true;
+            //}
+
             //Pass controls to the drive control method.
             astroGary.drive.DriveControl(
                     BotControls.DriveYStick(this),
@@ -71,10 +78,17 @@ public class DriverMode extends LinearOpMode {
                     BotControls.TurnStick(this),
                     BotControls.DriveThrottle(this));
 
-            astroGary.Collecta.CollectorControl(gamepad2.a, gamepad2.y, gamepad2.x);
+            astroGary.Collecta.CollectorControl(gamepad2.a, gamepad2.b, gamepad2.x);
 
-            // .Builda.BuilderControl(this, gamepad2.right_bumper, gamepad2.right_stick_y);
-            Paddle.setPower(gamepad2.right_stick_y);
+            if (gamepad2.right_bumper && astroGary.Builda.onState == false) {
+                astroGary.Builda.onState = true;
+            }
+            if (gamepad2.right_bumper && astroGary.Builda.onState == true) {
+                astroGary.Builda.onState = false;
+            }
+
+            astroGary.Builda.BuilderControl(this, gamepad2.right_bumper, gamepad2.right_stick_y);
+
             telemetry.update();
 
         }
