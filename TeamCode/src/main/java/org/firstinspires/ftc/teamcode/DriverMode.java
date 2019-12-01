@@ -89,6 +89,8 @@ public class DriverMode extends LinearOpMode {
 
             astroGary.Builda.BuilderControl(this, gamepad2.right_bumper, gamepad2.right_stick_y);
 
+            astroGary.Builda.BuilderControl(this, gamepad2.dpad_down, gamepad2.dpad_up);
+
             telemetry.update();
 
         }

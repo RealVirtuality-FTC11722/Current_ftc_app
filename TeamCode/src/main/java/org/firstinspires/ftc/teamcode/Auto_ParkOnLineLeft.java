@@ -84,7 +84,7 @@ public class Auto_ParkOnLineLeft extends LinearOpMode {
             this.sleep(2000);
             astroGary.drive.StopWheels();
             astroGary.drive.DriveLeft(this, 0.4);
-            this.sleep(2000);
+            this.sleep(2900);
             astroGary.drive.StopWheels();
             telemetry.addData("Runtime: ", runtime.seconds());
             telemetry.update();

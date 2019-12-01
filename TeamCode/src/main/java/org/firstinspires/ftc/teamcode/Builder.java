@@ -5,18 +5,20 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 
 /**
  * Created by Lyesome on 2018-01-13.
- * This Class contains all the methods from controlling the drive system using mecanum wheels
+ * This Class contains all the methods from controlling the building system using servos
  */
 
 public class Builder {
     public CRServo Paddle = null;
     public boolean onState = false;
+    public Servo ShifterServo = null;
 
 
 
@@ -30,6 +32,7 @@ public class Builder {
 
         //Initialize wheel motors
         Paddle  = myHWMap.crservo.get("servoPaddle");
+        ShifterServo = myHWMap.servo.get("servoShifter");
 
 
         // eg: Set the drive motor directions:
@@ -51,4 +54,17 @@ public class Builder {
         op.telemetry.addData("Paddle: ", Paddle.getPower());
         op.telemetry.update();
     }
-}
+
+    public void BuilderControl (LinearOpMode op, boolean ShifterP, boolean ShifterN) {
+        if (ShifterP) {
+            ShifterServo.setPosition(+0.799);
+        }
+
+        if (ShifterN) {
+            ShifterServo.setPosition(-0.1);
+
+
+        }
+
+    }
+    }
