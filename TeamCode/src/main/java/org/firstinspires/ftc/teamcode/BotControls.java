@@ -17,7 +17,7 @@ public class BotControls {
     //Drive controls
     public static double  DriveYStick(LinearOpMode op)              {return op.gamepad1.left_stick_y; }
     public static double  DriveXStick(LinearOpMode op)              {return op.gamepad1.left_stick_x; }
-    public static double  TurnStick(LinearOpMode op)                {return op.gamepad1.right_stick_x;}
+    public static double  TurnStick(LinearOpMode op)                {return op.gamepad1.right_stick_x; }
     public static double  DriveThrottle(LinearOpMode op)            {return op.gamepad1.right_trigger;}
 
     //Lander Latch Controls
