@@ -78,7 +78,7 @@ public class DriverMode extends LinearOpMode {
                     BotControls.TurnStick(this),
                     BotControls.DriveThrottle(this));
 
-            astroGary.Collecta.CollectorControl(gamepad2.a, gamepad2.b, gamepad2.x);
+            astroGary.Collecta.CollectorControl(gamepad2.x, gamepad2.b, gamepad2.a);
 
             if (gamepad2.right_bumper && astroGary.Builda.onState == false) {
                 astroGary.Builda.onState = true;
