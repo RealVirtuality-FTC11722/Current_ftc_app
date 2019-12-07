@@ -2,9 +2,6 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.CRServo;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 
@@ -13,9 +10,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * This file contains all the instructions for controlling the robot in Teleop mode.
  */
 
-@TeleOp(name="Driver Mode - Only", group="Linear OpMode")  // @Autonomous(...) is the other common choice
+@TeleOp(name="Driver Mode - Sensor Test", group="Linear OpMode Test")  // @Autonomous(...) is the other common choice
 //@Disabled
-public class DriverMode extends LinearOpMode {
+public class DriverModeSensorTest extends LinearOpMode {
 
     /* Declare OpMode members. */
     private ElapsedTime runtime = new ElapsedTime();
@@ -64,28 +61,12 @@ public class DriverMode extends LinearOpMode {
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
             telemetry.addData("Status", "Run Time: " + runtime.toString());
-
-            if (togglePressed) {
-                toggleReleased = false;
+            if (astroGary.mySensors.SkystoneDetected()){
+                telemetry.addData("Skystone: ", "DETECTED");
+                astroGary.Collecta.DropArm();
             } else {
-                toggleReleased = true;
+                telemetry.addData("Skystone: ", "Not Detected");
             }
-
-            //Pass controls to the drive control method.
-            astroGary.drive.DriveControl(
-                    BotControls.DriveYStick(this),
-                    BotControls.DriveXStick(this),
-                    BotControls.TurnStick(this),
-                    BotControls.DriveThrottle(this));
-
-            astroGary.Collecta.SpinnerControl(gamepad2.x, gamepad2.b, gamepad2.a);
-
-            if (gamepad2.y && toggleReleased) {
-                togglePressed = true;
-                astroGary.Collecta.ChangeArmState();
-            }
-
-            astroGary.Builda.BuilderControl(this, gamepad2.right_bumper, gamepad2.right_stick_y);
 
             telemetry.update();
 

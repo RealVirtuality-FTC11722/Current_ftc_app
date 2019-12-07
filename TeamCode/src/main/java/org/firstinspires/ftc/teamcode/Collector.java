@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 
@@ -17,9 +18,15 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 public class Collector {
     public DcMotor SpinnerL = null;
     public DcMotor SpinnerR = null;
+    public Servo Joint = null;
 
     double PULL_IN = 1.0;
     double SPIT_OUT = -0.3;
+    double DOWN = 0.5;
+    double UP = 0;
+
+    boolean ARM_DOWN = false;
+    boolean ARM_UP = true;
 
 
     HardwareMap myHWMap;
@@ -41,10 +48,11 @@ public class Collector {
         SpinnerL.setPower(0);
         SpinnerR.setPower(0);
 
+        Joint = myHWMap.servo.get("servoJoint");
+        Joint.setDirection(Servo.Direction.FORWARD);
     }
 
-
-    public void CollectorControl(boolean inButton, boolean outButton, boolean stopButton){
+    public void SpinnerControl(boolean inButton, boolean outButton, boolean stopButton){
         if (inButton){
             SpinnerL.setPower(PULL_IN);
             SpinnerR.setPower(PULL_IN);
@@ -59,5 +67,25 @@ public class Collector {
             SpinnerL.setPower(0);
             SpinnerR.setPower(0);
         }
+    }
+    public void ChangeArmState() {
+        if (ARM_DOWN) {
+            RaiseArm();
+        }
+        if (ARM_UP) {
+            DropArm();
+        }
+    }
+
+    public void DropArm() {
+        Joint.setPosition(DOWN);
+        ARM_DOWN = true;
+        ARM_UP = false;
+    }
+
+    public void RaiseArm() {
+        Joint.setPosition(UP);
+        ARM_UP = true;
+        ARM_DOWN = false;
     }
 }

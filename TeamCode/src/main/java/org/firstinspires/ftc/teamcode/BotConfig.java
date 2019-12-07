@@ -15,7 +15,7 @@ public class BotConfig {
 
     //VuMarkDecoder myVuMark = new VuMarkDecoder();
 
-    //Sensors mySensors = new Sensors();
+    Sensors mySensors = new Sensors();
 
     public BotConfig() { // constructor
     }
@@ -25,7 +25,7 @@ public class BotConfig {
         //Initialize Servos first to minimize movement
 
         //Then initialize sensors
-        //mySensors.initSensors(myNewHWMap);
+        mySensors.init(myNewHWMap);
         //myVuMark.init(myNewHWMap);
         //Finally initialize motors
 
@@ -43,6 +43,8 @@ public class BotConfig {
         Collecta.init(myNewHWMap);
 
         Builda.init(myNewHWMap);
+
+        mySensors.init(myNewHWMap);
 
     }
 

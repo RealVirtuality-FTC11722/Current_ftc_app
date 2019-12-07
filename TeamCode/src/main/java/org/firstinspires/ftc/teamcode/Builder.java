@@ -18,8 +18,12 @@ import com.qualcomm.robotcore.util.Range;
 public class Builder {
     public CRServo Paddle = null;
     public boolean onState = false;
-    public Servo ShifterServo = null;
+    //public Servo ShifterServo = null;
+    public Servo FoundationGrabberA;
+    public Servo FoundationGrabberB;
 
+    double GRAB = 0.6;
+    double RELEASE = 0.3;
 
 
     HardwareMap myHWMap;
@@ -32,14 +36,17 @@ public class Builder {
 
         //Initialize wheel motors
         Paddle  = myHWMap.crservo.get("servoPaddle");
-        ShifterServo = myHWMap.servo.get("servoShifter");
+        FoundationGrabberA = myHWMap.servo.get("FoundationGrabberA");
+        FoundationGrabberB = myHWMap.servo.get("FoundationGrabberB");
+        //ShifterServo = myHWMap.servo.get("servoShifter");
 
 
         // eg: Set the drive motor directions:
         // "Reverse" the motor that runs backwards when connected directly to the battery
 
         Paddle.setDirection(CRServo.Direction.FORWARD);
-
+        FoundationGrabberA.setDirection(Servo.Direction.FORWARD);
+        FoundationGrabberB.setDirection(Servo.Direction.FORWARD);
         Paddle.setPower(0);
 
     }
@@ -57,11 +64,11 @@ public class Builder {
 
     public void BuilderControl (LinearOpMode op, boolean ShifterP, boolean ShifterN) {
         if (ShifterP) {
-            ShifterServo.setPosition(+0.799);
+            //ShifterServo.setPosition(+0.799);
         }
 
         if (ShifterN) {
-            ShifterServo.setPosition(-0.1);
+            //ShifterServo.setPosition(-0.1);
 
 
         }
