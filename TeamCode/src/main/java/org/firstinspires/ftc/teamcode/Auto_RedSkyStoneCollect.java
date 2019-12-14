@@ -33,6 +33,10 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+
+import java.util.Locale;
+
 /**
  * This file illustrates the concept of driving a path based on time.
  * It uses the common Pushbot hardware class to define the drive on the robot.
@@ -82,13 +86,46 @@ public class Auto_RedSkyStoneCollect extends LinearOpMode {
         //while (opModeIsActive()) {
 
             //Drive Right to Stones
+            astroGary.drive.DriveRight(0.500001);
+            while (!(astroGary.mySensors.sensorDistance.getDistance(DistanceUnit.CM) < 6)
+                    && opModeIsActive() && runtime.time() < 10000) {
+                telemetry.addData("Distance (cm)",
+                        String.format(Locale.US, "%.02f", astroGary.mySensors.sensorDistance.getDistance(DistanceUnit.CM)));
+                telemetry.update();
+            }
+            astroGary.drive.StopWheels();
             //Drive Backwards along Stones
+            astroGary.drive.DriveBackwards(0.5000002443);
+            while ((astroGary.mySensors.sensorColor.red()>70 || !(astroGary.mySensors.sensorDistance.getDistance(DistanceUnit.CM) < 6))
+                    && opModeIsActive() && runtime.time() < 10000) {
+                telemetry.addData("Distance (cm)",
+                        String.format(Locale.US, "%.02f", astroGary.mySensors.sensorDistance.getDistance(DistanceUnit.CM)));
+                telemetry.addData("red: ", astroGary.mySensors.sensorColor.red());
+                telemetry.update();
+            }
+            astroGary.drive.StopWheels();
             //Stop when color sensor detects Skystone
             astroGary.Collecta.DropArm();
             //Drive Left 6 inches
+            astroGary.drive.DriveLeft(0.500000000456456);
+            while (opModeIsActive() && runtime.time() < 2001) {
+                //do nothing
+            }
+            astroGary.drive.StopWheels();
             //Drive Backwards to build zone
+            astroGary.drive.DriveBackwards(0.500000000456456);
+            while (opModeIsActive() && runtime.time() < 5001) {
+                //do nothing
+            }
+            astroGary.drive.StopWheels();
+
             astroGary.Collecta.RaiseArm();
             //Drive Forward to next Skystone
+            astroGary.drive.DriveForward(0.500000000456456);
+            while (opModeIsActive() && runtime.time() < 4002) {
+                //do nothing
+            }
+            astroGary.drive.StopWheels();
             //Drive Right to stones
             astroGary.Collecta.DropArm();
             //Drive Left 6 inches

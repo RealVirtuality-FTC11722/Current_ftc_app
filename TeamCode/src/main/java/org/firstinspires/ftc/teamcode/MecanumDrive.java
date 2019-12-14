@@ -21,7 +21,7 @@ public class MecanumDrive {
     public DcMotor motorBL = null;
     public DcMotor motorBR = null;
 
-    
+
 
     public static double Turn_Power = 0.15;
     double DRIVE_POWER_MAX_LOW = 0.3; //Maximum drive power without throttle
@@ -173,7 +173,7 @@ public class MecanumDrive {
             Thread.currentThread().interrupt();
         }
     }
-    public void DriveForward(LinearOpMode op, double power) {
+    public void DriveForward(double power) {
         motorFR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         motorFL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         motorBR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -184,7 +184,7 @@ public class MecanumDrive {
         motorFR.setPower(power);
     }
 
-    public void DriveLeft(LinearOpMode op, double power) {
+    public void DriveLeft(double power) {
         motorFR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         motorFL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         motorBR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -194,7 +194,7 @@ public class MecanumDrive {
         motorFL.setPower(-power);
         motorFR.setPower(power);
     }
-    public void DriveRight(LinearOpMode op, double power) {
+    public void DriveRight(double power) {
         motorFR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         motorFL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         motorBR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -205,6 +205,16 @@ public class MecanumDrive {
         motorFR.setPower(-power);
     }
 
+    public void DriveBackwards(double power) {
+        motorFR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        motorFL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        motorBR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        motorBL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        motorBL.setPower(-power);
+        motorBR.setPower(-power);
+        motorFL.setPower(-power);
+        motorFR.setPower(-power);
+    }
 
     //Method for autonomous driving forward and backwards
     //distance is specified in inches (positive = drive forward, negative = drive backward)
