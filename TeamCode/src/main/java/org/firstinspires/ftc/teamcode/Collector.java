@@ -22,7 +22,7 @@ public class Collector {
 
     double PULL_IN = 1.0;
     double SPIT_OUT = -0.3;
-    double DOWN = 0.5;
+    double DOWN = 0.82;
     double UP = 0;
 
     boolean ARM_DOWN = false;

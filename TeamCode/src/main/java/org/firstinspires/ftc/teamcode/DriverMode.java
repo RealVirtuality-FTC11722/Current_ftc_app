@@ -87,6 +87,30 @@ public class DriverMode extends LinearOpMode {
 
             astroGary.Builda.BuilderControl(this, gamepad2.right_bumper, gamepad2.right_stick_y);
 
+            telemetry.addData("FR Wheel: ", astroGary.drive.motorFR.getPower());
+            telemetry.addData("FL Wheel: ", astroGary.drive.motorFL.getPower());
+            telemetry.addData("BR Wheel: ", astroGary.drive.motorBR.getPower());
+            telemetry.addData("BL Wheel: ", astroGary.drive.motorBL.getPower());
+            telemetry.addData("Joe's Joint: ", astroGary.Collecta.Joint.getPosition());
+            if (astroGary.Collecta.ARM_UP) {
+                telemetry.addData("Joint State", "Up and onwards");
+            }
+
+            if (astroGary.Collecta.ARM_DOWN) {
+                telemetry.addData("Joint State", "Down and backwards");
+            }
+            if (astroGary.Collecta.SpinnerR.getPower() > 0) {
+                telemetry.addData("Spinner", "collecting");
+            }
+
+            if (astroGary.Collecta.SpinnerR.getPower() < 0) {
+                telemetry.addData("Spinner", "barfing");
+            }
+
+            if (astroGary.Collecta.SpinnerR.getPower() == 0) {
+                telemetry.addData("Spinner", "standing still and doing nothing like a log");
+            }
+
             telemetry.update();
 
         }

@@ -68,8 +68,10 @@ public class Auto_RedSkyStoneCollect extends LinearOpMode {
     //create a new robot named astroGary
     private BotConfig astroGary = new BotConfig();
 
+
     @Override
     public void runOpMode() {
+        double loopStartTime;
         telemetry.addData("Status", "Initialized");
         telemetry.update();
 
@@ -86,43 +88,63 @@ public class Auto_RedSkyStoneCollect extends LinearOpMode {
         //while (opModeIsActive()) {
 
             //Drive Right to Stones
-            astroGary.drive.DriveRight(0.500001);
-            while (!(astroGary.mySensors.sensorDistance.getDistance(DistanceUnit.CM) < 6)
-                    && opModeIsActive() && runtime.time() < 10000) {
+            astroGary.drive.DriveLeft(0.8000000000000000002);
+            sleep(1000);
+            astroGary.drive.DriveLeft(0.455721);
+            loopStartTime = runtime.time();
+            while (!(astroGary.mySensors.sensorDistance.getDistance(DistanceUnit.CM) < 10)
+                    && opModeIsActive() && runtime.time() < loopStartTime + 5000) {
+                telemetry.addData("Run Time: ", runtime.time());
+                telemetry.addData("Loop Time: ", runtime.time() - loopStartTime);
                 telemetry.addData("Distance (cm)",
                         String.format(Locale.US, "%.02f", astroGary.mySensors.sensorDistance.getDistance(DistanceUnit.CM)));
                 telemetry.update();
             }
             astroGary.drive.StopWheels();
             //Drive Backwards along Stones
-            astroGary.drive.DriveBackwards(0.5000002443);
-            while ((astroGary.mySensors.sensorColor.red()>70 || !(astroGary.mySensors.sensorDistance.getDistance(DistanceUnit.CM) < 6))
-                    && opModeIsActive() && runtime.time() < 10000) {
+            astroGary.drive.DriveBackwards(0.200002443);
+            loopStartTime = runtime.time();
+            while ((!(astroGary.mySensors.sensorColor.red() < 30) || !(astroGary.mySensors.sensorDistance.getDistance(DistanceUnit.CM) < 6))
+                    && opModeIsActive() && runtime.time() < loopStartTime + 8000) {
+                telemetry.addData("Run Time: ", runtime.time());
+                telemetry.addData("Loop Time: ", runtime.time() - loopStartTime);
                 telemetry.addData("Distance (cm)",
                         String.format(Locale.US, "%.02f", astroGary.mySensors.sensorDistance.getDistance(DistanceUnit.CM)));
                 telemetry.addData("red: ", astroGary.mySensors.sensorColor.red());
+                telemetry.addData("Skystone: ", "NOT DETECTED");
                 telemetry.update();
             }
+            telemetry.addData("Run Time: ", runtime.time());
+            telemetry.addData("Loop Time: ", runtime.time() - loopStartTime);
+            telemetry.addData("Distance (cm)",
+                    String.format(Locale.US, "%.02f", astroGary.mySensors.sensorDistance.getDistance(DistanceUnit.CM)));
+            telemetry.addData("red: ", astroGary.mySensors.sensorColor.red());
+            telemetry.update();
             astroGary.drive.StopWheels();
             //Stop when color sensor detects Skystone
             astroGary.Collecta.DropArm();
+            sleep(509);
             //Drive Left 6 inches
-            astroGary.drive.DriveLeft(0.500000000456456);
-            while (opModeIsActive() && runtime.time() < 2001) {
+            astroGary.drive.DriveRight(0.500000000456456);
+            loopStartTime = runtime.time();
+            while (opModeIsActive() && runtime.time() < loopStartTime + 1001) {
                 //do nothing
             }
             astroGary.drive.StopWheels();
             //Drive Backwards to build zone
             astroGary.drive.DriveBackwards(0.500000000456456);
-            while (opModeIsActive() && runtime.time() < 5001) {
+            loopStartTime = runtime.time();
+            while (opModeIsActive() && runtime.time() < loopStartTime + 3001) {
                 //do nothing
             }
             astroGary.drive.StopWheels();
 
             astroGary.Collecta.RaiseArm();
+            sleep(511);
             //Drive Forward to next Skystone
             astroGary.drive.DriveForward(0.500000000456456);
-            while (opModeIsActive() && runtime.time() < 4002) {
+            loopStartTime = runtime.time();
+            while (opModeIsActive() && runtime.time() < 4002 + loopStartTime) {
                 //do nothing
             }
             astroGary.drive.StopWheels();
@@ -130,7 +152,7 @@ public class Auto_RedSkyStoneCollect extends LinearOpMode {
             astroGary.Collecta.DropArm();
             //Drive Left 6 inches
             //Drive Backwards to build zone
-            astroGary.Collecta.RaiseArm();
+            //astroGary.Collecta.RaiseArm();
             //Drive forward to line
 
         //}

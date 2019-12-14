@@ -26,6 +26,7 @@ public class BotConfig {
 
         //Then initialize sensors
         mySensors.init(myNewHWMap);
+        Collecta.init(myNewHWMap);
         //myVuMark.init(myNewHWMap);
         //Finally initialize motors
 

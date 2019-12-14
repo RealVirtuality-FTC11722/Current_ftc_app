@@ -22,7 +22,7 @@ public class MecanumDrive {
     public DcMotor motorBR = null;
 
 
-
+    public static double STEERING = 0.01;
     public static double Turn_Power = 0.15;
     double DRIVE_POWER_MAX_LOW = 0.3; //Maximum drive power without throttle
     // IMU sensor object (gyro)
@@ -214,6 +214,20 @@ public class MecanumDrive {
         motorBR.setPower(-power);
         motorFL.setPower(-power);
         motorFR.setPower(-power);
+    }
+
+    public void SteerRight() {
+        motorFL.setPower(Range.clip(motorFL.getPower() + STEERING, -1.0, 1.0) );
+        motorBL.setPower(Range.clip(motorBL.getPower() + STEERING, -1.0, 1.0) );
+        motorBR.setPower(Range.clip(motorBR.getPower() - STEERING, -1.0, 1.0) );
+        motorFR.setPower(Range.clip(motorFR.getPower() - STEERING, -1.0, 1.0) );
+    }
+
+    public void SteerLeft() {
+        motorFL.setPower(Range.clip(motorFL.getPower() - STEERING, -1.0, 1.0) );
+        motorBL.setPower(Range.clip(motorBL.getPower() - STEERING, -1.0, 1.0) );
+        motorBR.setPower(Range.clip(motorBR.getPower() + STEERING, -1.0, 1.0) );
+        motorFR.setPower(Range.clip(motorFR.getPower() + STEERING, -1.0, 1.0) );
     }
 
     //Method for autonomous driving forward and backwards

@@ -33,6 +33,10 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+
+import java.util.Locale;
+
 /**
  * This file illustrates the concept of driving a path based on time.
  * It uses the common Pushbot hardware class to define the drive on the robot.
@@ -54,9 +58,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@Autonomous(name="Auto - Park On Line Straight", group="Auto")
+@Autonomous(name="Auto - Detect Skystones", group="Auto")
 //@Disabled
-public class Auto_ParkOnLineStraight extends LinearOpMode {
+public class Auto_SkyStoneDetect extends LinearOpMode {
 
     /* Declare OpMode members. */
     private ElapsedTime runtime = new ElapsedTime();
@@ -64,8 +68,10 @@ public class Auto_ParkOnLineStraight extends LinearOpMode {
     //create a new robot named astroGary
     private BotConfig astroGary = new BotConfig();
 
+
     @Override
     public void runOpMode() {
+        double loopStartTime;
         telemetry.addData("Status", "Initialized");
         telemetry.update();
 
@@ -80,12 +86,43 @@ public class Auto_ParkOnLineStraight extends LinearOpMode {
 
         runtime.reset();
         //while (opModeIsActive()) {
-            this.sleep(1);
-            astroGary.drive.DriveForward( 0.2);
-            this.sleep(6000);
-            astroGary.drive.StopWheels();
-            telemetry.addData("Runtime: ", runtime.seconds());
+
+            astroGary.drive.DriveBackwards(0.200002443);
+            loopStartTime = runtime.time();
+            while ((!(astroGary.mySensors.sensorColor.red() < 30) || !(astroGary.mySensors.sensorDistance.getDistance(DistanceUnit.CM) < 8))
+                    && opModeIsActive() && runtime.time() < loopStartTime + 8000) {
+                if (astroGary.mySensors.sensorDistance.getDistance(DistanceUnit.CM) < 6) {
+                    astroGary.drive.SteerLeft();
+                }
+                if (astroGary.mySensors.sensorDistance.getDistance(DistanceUnit.CM) > 6) {
+                    astroGary.drive.SteerRight();
+                }
+                telemetry.addData("Run Time: ", runtime.time());
+                telemetry.addData("Loop Time: ", runtime.time() - loopStartTime);
+                telemetry.addData("Distance (cm)",
+                        String.format(Locale.US, "%.02f", astroGary.mySensors.sensorDistance.getDistance(DistanceUnit.CM)));
+                telemetry.addData("red: ", astroGary.mySensors.sensorColor.red());
+                telemetry.addData("Skystone: ", "NOT DETECTED");
+                telemetry.update();
+            }
+            telemetry.addData("Run Time: ", runtime.time());
+            telemetry.addData("Loop Time: ", runtime.time() - loopStartTime);
+            telemetry.addData("Distance (cm)",
+                    String.format(Locale.US, "%.02f", astroGary.mySensors.sensorDistance.getDistance(DistanceUnit.CM)));
+            telemetry.addData("red: ", astroGary.mySensors.sensorColor.red());
+            telemetry.addData("Skystone: ", "DETECTED");
             telemetry.update();
+            astroGary.drive.StopWheels();
+            //Stop when color sensor detects Skystone
+            astroGary.Collecta.DropArm();
+            sleep(509);
+            //Drive Left 6 inches
+            //astroGary.drive.DriveRight(0.500000000456456);
+            loopStartTime = runtime.time();
+            while (opModeIsActive() && runtime.time() < loopStartTime + 2001) {
+                //do nothing
+            }
+            astroGary.drive.StopWheels();
         //}
 
     }

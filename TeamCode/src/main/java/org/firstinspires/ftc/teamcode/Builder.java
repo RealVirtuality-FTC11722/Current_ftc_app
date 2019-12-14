@@ -58,8 +58,6 @@ public class Builder {
         } else {
             Paddle.setPower(Range.clip(joeStick, -0.8, 0.8));
         }
-        op.telemetry.addData("Paddle: ", Paddle.getPower());
-        op.telemetry.update();
     }
 
     public void BuilderControl (LinearOpMode op, boolean ShifterP, boolean ShifterN) {

@@ -80,10 +80,10 @@ public class Auto_ParkOnLineLeft extends LinearOpMode {
 
         runtime.reset();
         //while (opModeIsActive()) {
-            astroGary.drive.DriveForward(this, 0.4);
+            astroGary.drive.DriveForward(0.4);
             this.sleep(2000);
             astroGary.drive.StopWheels();
-            astroGary.drive.DriveLeft(this, 0.4);
+            astroGary.drive.DriveLeft( 0.4);
             this.sleep(2900);
             astroGary.drive.StopWheels();
             telemetry.addData("Runtime: ", runtime.seconds());
