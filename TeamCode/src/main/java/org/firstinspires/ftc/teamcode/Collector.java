@@ -29,17 +29,14 @@ public class Collector {
     boolean ARM_UP = true;
 
 
-    HardwareMap myHWMap;
-
     public Collector(){ //constructor
     }
 
-    public void init(HardwareMap myNewHWMap){
-        myHWMap = myNewHWMap;
+    public void init(HardwareMap myHWMap){
 
         //Initialize wheel motors
-        SpinnerL  = myHWMap.dcMotor.get("motorSpinnerL");
-        SpinnerR  = myHWMap.dcMotor.get("motorSpinnerR");
+        SpinnerL  = myHWMap.get(DcMotor.class, "motorSpinnerL");
+        SpinnerR  = myHWMap.get(DcMotor.class, "motorSpinnerR");
 
         // eg: Set the drive motor directions:
         // "Reverse" the motor that runs backwards when connected directly to the battery

@@ -33,13 +33,10 @@ public class Sensors {
 
 
 
-    HardwareMap myHWMap;
-
     public Sensors(){ //constructor
     }
 
-    public void init(HardwareMap myNewHWMap){
-        myHWMap = myNewHWMap;
+    public void init(HardwareMap myHWMap){
 
         sensorColor = myHWMap.get(ColorSensor.class, "sensorColor");
 

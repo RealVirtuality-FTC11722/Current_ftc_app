@@ -22,25 +22,26 @@ public class MecanumDrive {
     public DcMotor motorBR = null;
 
 
-    public static double STEERING = 0.01;
+    public static double STEERING = 0.004;
     public static double Turn_Power = 0.15;
     double DRIVE_POWER_MAX_LOW = 0.3; //Maximum drive power without throttle
+    double TURN_POWER_MIN = 0.17; //Minumun turn power
+    static final double     HEADING_THRESHOLD       = 1 ;      // As tight as we can make it with an integer gyro
+    static final double     P_TURN_COEFF            = 0.1;     // Larger is more responsive, but also less stable
+    static final double     P_DRIVE_COEFF           = 0.15;     // Larger is more responsive, but also less stable
     // IMU sensor object (gyro)
     BNO055IMU imu;
-
-    HardwareMap myHWMap;
 
     public MecanumDrive(){ //constructor
     }
 
-    public void initAuto(HardwareMap myNewHWMap){
-        myHWMap = myNewHWMap;
+    public void initAuto(HardwareMap myHWMap){
 
         //Initialize wheel motors
-        motorFL  = myHWMap.dcMotor.get("motorFL");
-        motorFR  = myHWMap.dcMotor.get("motorFR");
-        motorBL  = myHWMap.dcMotor.get("motorBL");
-        motorBR  = myHWMap.dcMotor.get("motorBR");
+        motorFL  = myHWMap.get(DcMotor.class, "motorFL");
+        motorFR  = myHWMap.get(DcMotor.class, "motorFR");
+        motorBL  = myHWMap.get(DcMotor.class, "motorBL");
+        motorBR  = myHWMap.get(DcMotor.class, "motorBR");
 
         // eg: Set the drive motor directions:
         // "Reverse" the motor that runs backwards when connected directly to the battery
@@ -75,14 +76,13 @@ public class MecanumDrive {
         imu.initialize(parameters);
     }
 
-    public void initMotors(HardwareMap myNewHWMap) {
-        myHWMap = myNewHWMap;
+    public void initMotors(HardwareMap myHWMap) {
 
         //Initialize wheel motors
-        motorFL = myHWMap.dcMotor.get("motorFL");
-        motorFR = myHWMap.dcMotor.get("motorFR");
-        motorBL = myHWMap.dcMotor.get("motorBL");
-        motorBR = myHWMap.dcMotor.get("motorBR");
+        motorFL = myHWMap.get(DcMotor.class, "motorFL");
+        motorFR = myHWMap.get(DcMotor.class, "motorFR");
+        motorBL = myHWMap.get(DcMotor.class, "motorBL");
+        motorBR = myHWMap.get(DcMotor.class, "motorBR");
 
         // eg: Set the drive motor directions:
         // "Reverse" the motor that runs backwards when connected directly to the battery
@@ -96,8 +96,7 @@ public class MecanumDrive {
         motorBR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
-    public void initGyro(HardwareMap myNewHWMap) {
-        myHWMap = myNewHWMap;
+    public void initGyro(HardwareMap myHWMap) {
         // Set up the parameters with which we will use our IMU. Note that integration
         // algorithm here just reports accelerations to the logcat log; it doesn't actually
         // provide positional information.
@@ -117,13 +116,12 @@ public class MecanumDrive {
     }
 
     public void initTele(HardwareMap myHWMap) {
-        //myHWMap = myNewHWMap;
 
         //Initialize wheel motors
-        motorFL = myHWMap.dcMotor.get("motorFL");
-        motorFR = myHWMap.dcMotor.get("motorFR");
-        motorBL = myHWMap.dcMotor.get("motorBL");
-        motorBR = myHWMap.dcMotor.get("motorBR");
+        motorFL = myHWMap.get(DcMotor.class, "motorFL");
+        motorFR = myHWMap.get(DcMotor.class, "motorFR");
+        motorBL = myHWMap.get(DcMotor.class, "motorBL");
+        motorBR = myHWMap.get(DcMotor.class, "motorBR");
 
         // eg: Set the drive motor directions:
         // "Reverse" the motor that runs backwards when connected directly to the battery
@@ -194,6 +192,34 @@ public class MecanumDrive {
         motorFL.setPower(-power);
         motorFR.setPower(power);
     }
+    public void DriveLeftWithGyro(double power, LinearOpMode op, double time) {
+        motorFR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        motorFL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        motorBR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        motorBL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        ElapsedTime runtime = new ElapsedTime();
+        runtime.reset();
+        DriveLeft( 0.4);
+        op.sleep(500);
+        DriveLeft( 0.6);
+        op.sleep(500);
+        DriveLeft( 0.8);
+        while (op.opModeIsActive() && runtime.time() < time) {
+            op.telemetry.addData("Time: ", runtime.time());
+            op.telemetry.update();
+            KeepStraight();
+        }
+    }
+
+    public void KeepStraight() {
+        if (imu.getAngularOrientation().firstAngle < 0){
+            SteerLeft();
+        }
+        if (imu.getAngularOrientation().firstAngle > 0) {
+            SteerRight();
+        }
+    }
+
     public void DriveRight(double power) {
         motorFR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         motorFL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -219,15 +245,15 @@ public class MecanumDrive {
     public void SteerRight() {
         motorFL.setPower(Range.clip(motorFL.getPower() + STEERING, -1.0, 1.0) );
         motorBL.setPower(Range.clip(motorBL.getPower() + STEERING, -1.0, 1.0) );
-        motorBR.setPower(Range.clip(motorBR.getPower() - STEERING, -1.0, 1.0) );
         motorFR.setPower(Range.clip(motorFR.getPower() - STEERING, -1.0, 1.0) );
+        motorBR.setPower(Range.clip(motorBR.getPower() - STEERING, -1.0, 1.0) );
     }
 
     public void SteerLeft() {
         motorFL.setPower(Range.clip(motorFL.getPower() - STEERING, -1.0, 1.0) );
         motorBL.setPower(Range.clip(motorBL.getPower() - STEERING, -1.0, 1.0) );
-        motorBR.setPower(Range.clip(motorBR.getPower() + STEERING, -1.0, 1.0) );
         motorFR.setPower(Range.clip(motorFR.getPower() + STEERING, -1.0, 1.0) );
+        motorBR.setPower(Range.clip(motorBR.getPower() + STEERING, -1.0, 1.0) );
     }
 
     //Method for autonomous driving forward and backwards
@@ -325,51 +351,88 @@ public class MecanumDrive {
         }
         StopWheels();
     }
+    public void TurnToAngle(LinearOpMode op, double targetAngle) {
+        double initialAngle = imu.getAngularOrientation().firstAngle;
+        double turnPower = 0.4;
+        double threshold = .1;
+        double initialDiff;
+        double difference = initialAngle - targetAngle;
+        if (initialAngle < 180) {
+            motorFL.setPower(-turnPower);
+            motorBL.setPower(-turnPower);
+            motorFR.setPower(turnPower);
+            motorFR.setPower(turnPower);
+        } else {
+            motorFL.setPower(turnPower);
+            motorBL.setPower(turnPower);
+            motorFR.setPower(-turnPower);
+            motorFR.setPower(-turnPower);
+        }
+        while (Math.abs(difference) > threshold && op.opModeIsActive()) {
+
+        }
+        StopWheels();
+    }
+    public double getError(double targetAngle) {
+
+        double robotError;
+
+        // calculate error in -179 to +180 range  (
+        robotError = (targetAngle - imu.getAngularOrientation().firstAngle);
+        //while (robotError > 180)  robotError -= 360;
+        //while (robotError <= -180) robotError += 360;
+        return robotError;
+    }
 
     //Method for autonomous turning
     // + is left (CCW), - is right (CW)
-    public void Turn(LinearOpMode op, double Angle, double timeout){
-        ElapsedTime drivetime = new ElapsedTime();
-        motorBL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        motorBR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        motorBL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        motorBR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    public void Turn(LinearOpMode op, double angle, double timeout){
+        double error = 0;
+        double steerPower = 0;
+        double leftPower;
+        double rightPower;
         double initialAngle = imu.getAngularOrientation().firstAngle;
-        double targetAngle;
-        double turnPower = 0.4;
-        double threshold = .1;
-        double initalDiff;
-        double difference;
-        //Correct for gyro's sign switch at 180
-        if (Math.abs(initialAngle + Angle) > 180) {
-            targetAngle = initialAngle + Angle - Math.signum(initialAngle + Angle)*360;
-        } else {
-            targetAngle = initialAngle + Angle;
-        }
-        initalDiff = targetAngle - imu.getAngularOrientation().firstAngle;
-        difference = initalDiff;
-        //Base turnPower off remaining turn angle
-        while (Math.abs(difference) > threshold && op.opModeIsActive() && drivetime.seconds() < timeout) {
-            turnPower = Math.signum(difference)*Math.sqrt(Math.abs(difference/initalDiff))/2;
-            if (Math.abs(difference) <= 180) { //Turn in the direction minimizes rhe turn angle
-                motorFL.setPower(-turnPower);
-                motorFR.setPower(turnPower);
-                motorBL.setPower(-turnPower);
-                motorBR.setPower(turnPower);
-            } else {
-                motorFL.setPower(turnPower);
-                motorFR.setPower(-turnPower);
-                motorBL.setPower(turnPower);
-                motorBR.setPower(-turnPower);
-            }
-            difference = targetAngle - imu.getAngularOrientation().firstAngle;
-            op.telemetry.addData("Target Angle", targetAngle);
-            op.telemetry.addData("Current Angle", imu.getAngularOrientation().firstAngle);
-            op.telemetry.addData("Difference", difference);
-            op.telemetry.addData("Power", turnPower);
+        boolean onTarget = false;
+        //motorBL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        //motorBR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motorBL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        motorBR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        motorFL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        motorFR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        op.telemetry.setAutoClear(true);
+        while (op.opModeIsActive() && !onTarget) {
+            error = getError(angle);
+            op.telemetry.addData("Initial Angle: ", initialAngle);
+            op.telemetry.addData("Direction: ", imu.getAngularOrientation().firstAngle);
+            op.telemetry.addData("Error: ", getError(angle));
+            op.telemetry.addData("Steer Power: ", steerPower);
             op.telemetry.update();
+            if (Math.abs(getError(angle)) <= HEADING_THRESHOLD) {
+                steerPower = 0.0;
+                leftPower = 0.0;
+                rightPower = 0.0;
+                onTarget = true;
+            } else {
+                steerPower = getError(angle)/180;
+                if (steerPower > -TURN_POWER_MIN && steerPower < 0) {
+                    steerPower = -TURN_POWER_MIN;
+                }
+                if (steerPower > 0 && steerPower < TURN_POWER_MIN) {
+                    steerPower = TURN_POWER_MIN;
+                }
+                rightPower = steerPower;
+                leftPower = -rightPower;
+            }
+            motorFL.setPower(leftPower);
+            motorBL.setPower(leftPower);
+            motorFR.setPower(rightPower);
+            motorBR.setPower(rightPower);
         }
-        StopWheels();
+        op.telemetry.setAutoClear(false);
+        op.telemetry.addData("Direction: ", imu.getAngularOrientation().firstAngle);
+        op.telemetry.addData("Error: ", getError(angle));
+        op.telemetry.addData("Steer Power: ", steerPower);
+        op.telemetry.update();
     }
 
 

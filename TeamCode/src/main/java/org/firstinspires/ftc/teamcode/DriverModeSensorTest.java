@@ -17,8 +17,8 @@ public class DriverModeSensorTest extends LinearOpMode {
     /* Declare OpMode members. */
     private ElapsedTime runtime = new ElapsedTime();
 
-    //create a new robot named astroGary
-    private BotConfig astroGary = new BotConfig();
+    //create a new robot named skyGary
+    private BotConfig skyGary = new BotConfig();
     //public CRServo testPaddle = null;
 
 
@@ -36,7 +36,7 @@ public class DriverModeSensorTest extends LinearOpMode {
 
 
         //Use the Teleop initialization method
-        astroGary.InitTele(hardwareMap);
+        skyGary.InitTele(hardwareMap);
         //testPaddle = hardwareMap.get(CRServo.class, "servoPaddle");
 
         //Set toggle initial states
@@ -61,9 +61,9 @@ public class DriverModeSensorTest extends LinearOpMode {
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
             telemetry.addData("Status", "Run Time: " + runtime.toString());
-            if (astroGary.mySensors.SkystoneDetected()){
+            if (skyGary.mySensors.SkystoneDetected()){
                 telemetry.addData("Skystone: ", "DETECTED");
-                astroGary.Collecta.DropArm();
+                skyGary.Collecta.DropArm();
             } else {
                 telemetry.addData("Skystone: ", "Not Detected");
             }

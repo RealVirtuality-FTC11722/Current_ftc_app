@@ -65,8 +65,8 @@ public class Auto_RedSkyStoneCollect extends LinearOpMode {
     /* Declare OpMode members. */
     private ElapsedTime runtime = new ElapsedTime();
 
-    //create a new robot named astroGary
-    private BotConfig astroGary = new BotConfig();
+    //create a new robot named skyGary
+    private BotConfig skyGary = new BotConfig();
 
 
     @Override
@@ -76,7 +76,7 @@ public class Auto_RedSkyStoneCollect extends LinearOpMode {
         telemetry.update();
 
         //Use the Teleop initialization method
-        astroGary.InitAuto(hardwareMap);
+        skyGary.InitAuto(hardwareMap);
         AutoTransitioner.transitionOnStop(this, "Driver Mode - Only");
 
         // Wait for the game to start (driver presses PLAY)
@@ -88,71 +88,73 @@ public class Auto_RedSkyStoneCollect extends LinearOpMode {
         //while (opModeIsActive()) {
 
             //Drive Right to Stones
-            astroGary.drive.DriveLeft(0.8000000000000000002);
-            sleep(1000);
-            astroGary.drive.DriveLeft(0.455721);
+            skyGary.Drive.DriveLeftWithGyro(0.8, this, 2.0);
+            skyGary.Drive.DriveLeft(0.455721);
             loopStartTime = runtime.time();
-            while (!(astroGary.mySensors.sensorDistance.getDistance(DistanceUnit.CM) < 10)
+            while (!(skyGary.mySensors.sensorDistance.getDistance(DistanceUnit.CM) < 12)
                     && opModeIsActive() && runtime.time() < loopStartTime + 5000) {
+                skyGary.Drive.KeepStraight();
                 telemetry.addData("Run Time: ", runtime.time());
                 telemetry.addData("Loop Time: ", runtime.time() - loopStartTime);
                 telemetry.addData("Distance (cm)",
-                        String.format(Locale.US, "%.02f", astroGary.mySensors.sensorDistance.getDistance(DistanceUnit.CM)));
+                        String.format(Locale.US, "%.02f", skyGary.mySensors.sensorDistance.getDistance(DistanceUnit.CM)));
                 telemetry.update();
             }
-            astroGary.drive.StopWheels();
-            //Drive Backwards along Stones
-            astroGary.drive.DriveBackwards(0.200002443);
+            skyGary.Drive.StopWheels();
+            //skyGary.Drive.Turn(this, -skyGary.Drive.imu.getAngularOrientation().firstAngle, 5000);
+        //Drive Backwards along Stones
+            skyGary.Drive.DriveBackwards(0.2);
             loopStartTime = runtime.time();
-            while ((!(astroGary.mySensors.sensorColor.red() < 30) || !(astroGary.mySensors.sensorDistance.getDistance(DistanceUnit.CM) < 6))
+            while ((!(skyGary.mySensors.sensorColor.red() < 30) || !(skyGary.mySensors.sensorDistance.getDistance(DistanceUnit.CM) < 12))
                     && opModeIsActive() && runtime.time() < loopStartTime + 8000) {
+                skyGary.Drive.KeepStraight();
                 telemetry.addData("Run Time: ", runtime.time());
                 telemetry.addData("Loop Time: ", runtime.time() - loopStartTime);
                 telemetry.addData("Distance (cm)",
-                        String.format(Locale.US, "%.02f", astroGary.mySensors.sensorDistance.getDistance(DistanceUnit.CM)));
-                telemetry.addData("red: ", astroGary.mySensors.sensorColor.red());
+                        String.format(Locale.US, "%.02f", skyGary.mySensors.sensorDistance.getDistance(DistanceUnit.CM)));
+                telemetry.addData("red: ", skyGary.mySensors.sensorColor.red());
                 telemetry.addData("Skystone: ", "NOT DETECTED");
                 telemetry.update();
             }
             telemetry.addData("Run Time: ", runtime.time());
             telemetry.addData("Loop Time: ", runtime.time() - loopStartTime);
             telemetry.addData("Distance (cm)",
-                    String.format(Locale.US, "%.02f", astroGary.mySensors.sensorDistance.getDistance(DistanceUnit.CM)));
-            telemetry.addData("red: ", astroGary.mySensors.sensorColor.red());
+                    String.format(Locale.US, "%.02f", skyGary.mySensors.sensorDistance.getDistance(DistanceUnit.CM)));
+            telemetry.addData("red: ", skyGary.mySensors.sensorColor.red());
             telemetry.update();
-            astroGary.drive.StopWheels();
+            skyGary.Drive.StopWheels();
             //Stop when color sensor detects Skystone
-            astroGary.Collecta.DropArm();
+            skyGary.Collecta.DropArm();
             sleep(509);
             //Drive Left 6 inches
-            astroGary.drive.DriveRight(0.500000000456456);
+            skyGary.Drive.DriveRight(0.5);
             loopStartTime = runtime.time();
-            while (opModeIsActive() && runtime.time() < loopStartTime + 1001) {
-                //do nothing
+            while (opModeIsActive() && runtime.time() < loopStartTime + 501) {
+                skyGary.Drive.KeepStraight();
             }
-            astroGary.drive.StopWheels();
+            skyGary.Drive.StopWheels();
             //Drive Backwards to build zone
-            astroGary.drive.DriveBackwards(0.500000000456456);
+            skyGary.Drive.DriveBackwards(0.5);
             loopStartTime = runtime.time();
             while (opModeIsActive() && runtime.time() < loopStartTime + 3001) {
-                //do nothing
+                skyGary.Drive.KeepStraight();
             }
-            astroGary.drive.StopWheels();
+            skyGary.Drive.StopWheels();
 
-            astroGary.Collecta.RaiseArm();
+            skyGary.Collecta.RaiseArm();
             sleep(511);
             //Drive Forward to next Skystone
-            astroGary.drive.DriveForward(0.500000000456456);
+            skyGary.Drive.DriveForward(0.500000000456456);
             loopStartTime = runtime.time();
             while (opModeIsActive() && runtime.time() < 4002 + loopStartTime) {
                 //do nothing
             }
-            astroGary.drive.StopWheels();
+            skyGary.Drive.StopWheels();
             //Drive Right to stones
-            astroGary.Collecta.DropArm();
+            skyGary.Collecta.DropArm();
             //Drive Left 6 inches
             //Drive Backwards to build zone
-            //astroGary.Collecta.RaiseArm();
+            //skyGary.Collecta.RaiseArm();
             //Drive forward to line
 
         //}

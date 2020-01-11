@@ -61,8 +61,8 @@ public class Auto_Nothing extends LinearOpMode {
     /* Declare OpMode members. */
     private ElapsedTime runtime = new ElapsedTime();
 
-    //create a new robot named astroGary
-    private BotConfig astroGary = new BotConfig();
+    //create a new robot named skyGary
+    private BotConfig skyGary = new BotConfig();
 
     @Override
     public void runOpMode() {
@@ -70,7 +70,7 @@ public class Auto_Nothing extends LinearOpMode {
         telemetry.update();
 
         //Use the Teleop initialization method
-        astroGary.InitAuto(hardwareMap);
+        skyGary.InitAuto(hardwareMap);
         AutoTransitioner.transitionOnStop(this, "Driver Mode - Only");
 
         // Wait for the game to start (driver presses PLAY)

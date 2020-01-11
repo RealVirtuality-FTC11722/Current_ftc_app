@@ -18,7 +18,7 @@ public class ServoTest extends LinearOpMode {
     /* Declare OpMode members. */
     private ElapsedTime runtime = new ElapsedTime();
 
-    //create a new robot named astroGary
+    //create a new robot named skyGary
     public CRServo testPaddle = null;
 
 

@@ -61,8 +61,8 @@ public class Auto_ParkOnLineRight extends LinearOpMode {
     /* Declare OpMode members. */
     private ElapsedTime runtime = new ElapsedTime();
 
-    //create a new robot named astroGary
-    private BotConfig astroGary = new BotConfig();
+    //create a new robot named skyGary
+    private BotConfig skyGary = new BotConfig();
 
     @Override
     public void runOpMode() {
@@ -70,7 +70,7 @@ public class Auto_ParkOnLineRight extends LinearOpMode {
         telemetry.update();
 
         //Use the Teleop initialization method
-        astroGary.InitAuto(hardwareMap);
+        skyGary.InitAuto(hardwareMap);
         AutoTransitioner.transitionOnStop(this, "Driver Mode - Only");
 
         // Wait for the game to start (driver presses PLAY)
@@ -80,12 +80,12 @@ public class Auto_ParkOnLineRight extends LinearOpMode {
 
         runtime.reset();
         //while (opModeIsActive()) {
-            astroGary.drive.DriveForward( 0.4);
+            skyGary.Drive.DriveForward( 0.4);
             this.sleep(2000);
-            astroGary.drive.StopWheels();
-            astroGary.drive.DriveRight( 0.4);
+            skyGary.Drive.StopWheels();
+            skyGary.Drive.DriveRight( 0.4);
             this.sleep(2900);
-            astroGary.drive.StopWheels();
+            skyGary.Drive.StopWheels();
             telemetry.addData("Runtime: ", runtime.seconds());
             telemetry.update();
         //}

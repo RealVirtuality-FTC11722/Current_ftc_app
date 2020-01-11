@@ -65,8 +65,8 @@ public class Auto_SkyStoneDetect extends LinearOpMode {
     /* Declare OpMode members. */
     private ElapsedTime runtime = new ElapsedTime();
 
-    //create a new robot named astroGary
-    private BotConfig astroGary = new BotConfig();
+    //create a new robot named skyGary
+    private BotConfig skyGary = new BotConfig();
 
 
     @Override
@@ -76,8 +76,8 @@ public class Auto_SkyStoneDetect extends LinearOpMode {
         telemetry.update();
 
         //Use the Teleop initialization method
-        astroGary.InitAuto(hardwareMap);
-        AutoTransitioner.transitionOnStop(this, "Driver Mode - Only");
+        skyGary.InitAuto(hardwareMap);
+        //AutoTransitioner.transitionOnStop(this, "Driver Mode - Only");
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
@@ -87,42 +87,44 @@ public class Auto_SkyStoneDetect extends LinearOpMode {
         runtime.reset();
         //while (opModeIsActive()) {
 
-            astroGary.drive.DriveBackwards(0.200002443);
+            skyGary.Drive.DriveBackwards(0.2);
             loopStartTime = runtime.time();
-            while ((!(astroGary.mySensors.sensorColor.red() < 30) || !(astroGary.mySensors.sensorDistance.getDistance(DistanceUnit.CM) < 8))
+            while ((!(skyGary.mySensors.sensorColor.red() < 30) || !(skyGary.mySensors.sensorDistance.getDistance(DistanceUnit.CM) < 12))
                     && opModeIsActive() && runtime.time() < loopStartTime + 8000) {
-                if (astroGary.mySensors.sensorDistance.getDistance(DistanceUnit.CM) < 6) {
-                    astroGary.drive.SteerLeft();
+                if (skyGary.mySensors.sensorDistance.getDistance(DistanceUnit.CM) < 5.7) {
+                    telemetry.addData("Steer: ", "Left");
+                    skyGary.Drive.SteerLeft();
                 }
-                if (astroGary.mySensors.sensorDistance.getDistance(DistanceUnit.CM) > 6) {
-                    astroGary.drive.SteerRight();
+                if (skyGary.mySensors.sensorDistance.getDistance(DistanceUnit.CM) > 6.3) {
+                    telemetry.addData("Steer: ", "Right");
+                    skyGary.Drive.SteerRight();
                 }
                 telemetry.addData("Run Time: ", runtime.time());
                 telemetry.addData("Loop Time: ", runtime.time() - loopStartTime);
                 telemetry.addData("Distance (cm)",
-                        String.format(Locale.US, "%.02f", astroGary.mySensors.sensorDistance.getDistance(DistanceUnit.CM)));
-                telemetry.addData("red: ", astroGary.mySensors.sensorColor.red());
+                        String.format(Locale.US, "%.02f", skyGary.mySensors.sensorDistance.getDistance(DistanceUnit.CM)));
+                telemetry.addData("red: ", skyGary.mySensors.sensorColor.red());
                 telemetry.addData("Skystone: ", "NOT DETECTED");
                 telemetry.update();
             }
             telemetry.addData("Run Time: ", runtime.time());
             telemetry.addData("Loop Time: ", runtime.time() - loopStartTime);
             telemetry.addData("Distance (cm)",
-                    String.format(Locale.US, "%.02f", astroGary.mySensors.sensorDistance.getDistance(DistanceUnit.CM)));
-            telemetry.addData("red: ", astroGary.mySensors.sensorColor.red());
+                    String.format(Locale.US, "%.02f", skyGary.mySensors.sensorDistance.getDistance(DistanceUnit.CM)));
+            telemetry.addData("red: ", skyGary.mySensors.sensorColor.red());
             telemetry.addData("Skystone: ", "DETECTED");
             telemetry.update();
-            astroGary.drive.StopWheels();
+            skyGary.Drive.StopWheels();
             //Stop when color sensor detects Skystone
-            astroGary.Collecta.DropArm();
+            skyGary.Collecta.DropArm();
             sleep(509);
             //Drive Left 6 inches
-            //astroGary.drive.DriveRight(0.500000000456456);
+            skyGary.Drive.DriveRight(0.500000000456456);
             loopStartTime = runtime.time();
             while (opModeIsActive() && runtime.time() < loopStartTime + 2001) {
                 //do nothing
             }
-            astroGary.drive.StopWheels();
+            skyGary.Drive.StopWheels();
         //}
 
     }

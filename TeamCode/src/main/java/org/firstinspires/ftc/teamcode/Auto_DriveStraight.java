@@ -54,9 +54,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@Autonomous(name="Auto - Park On Line Left", group="Auto")
+@Autonomous(name="Auto - Turn 90", group="Test")
 //@Disabled
-public class Auto_ParkOnLineLeft extends LinearOpMode {
+public class Auto_DriveStraight extends LinearOpMode {
 
     /* Declare OpMode members. */
     private ElapsedTime runtime = new ElapsedTime();
@@ -66,12 +66,12 @@ public class Auto_ParkOnLineLeft extends LinearOpMode {
 
     @Override
     public void runOpMode() {
+        telemetry.setAutoClear(false);
         telemetry.addData("Status", "Initialized");
         telemetry.update();
 
         //Use the Teleop initialization method
         skyGary.InitAuto(hardwareMap);
-        AutoTransitioner.transitionOnStop(this, "Driver Mode - Only");
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
@@ -80,15 +80,10 @@ public class Auto_ParkOnLineLeft extends LinearOpMode {
 
         runtime.reset();
         //while (opModeIsActive()) {
-            skyGary.Drive.DriveForward(0.4);
-            this.sleep(2000);
-            skyGary.Drive.StopWheels();
-            skyGary.Drive.DriveLeft( 0.4);
-            this.sleep(2900);
-            skyGary.Drive.StopWheels();
-            telemetry.addData("Runtime: ", runtime.seconds());
-            telemetry.update();
+            skyGary.Drive.Turn( this, 90, 5000);
+            //telemetry.addData("Runtime: ", runtime.seconds());
+            //telemetry.update();
         //}
-
+        sleep(20000);
     }
 }

@@ -2,9 +2,6 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.CRServo;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 
@@ -20,11 +17,8 @@ public class DriverMode extends LinearOpMode {
     /* Declare OpMode members. */
     private ElapsedTime runtime = new ElapsedTime();
 
-    //create a new robot named astroGary
-    private BotConfig astroGary = new BotConfig();
-    //public CRServo testPaddle = null;
-
-
+    //create a new robot named skyGary
+    private BotConfig skyGary = new BotConfig();
 
     @Override
     public void runOpMode() {
@@ -39,8 +33,7 @@ public class DriverMode extends LinearOpMode {
 
 
         //Use the Teleop initialization method
-        astroGary.InitTele(hardwareMap);
-        //testPaddle = hardwareMap.get(CRServo.class, "servoPaddle");
+        skyGary.InitTele(hardwareMap);
 
         //Set toggle initial states
         boolean togglePressed = false;
@@ -65,49 +58,55 @@ public class DriverMode extends LinearOpMode {
         while (opModeIsActive()) {
             telemetry.addData("Status", "Run Time: " + runtime.toString());
 
-            if (togglePressed) {
-                toggleReleased = false;
+            //Pass controls to the drive control method.
+            skyGary.Drive.DriveControl(
+                    BotControls.DriveYStick(this),
+                    BotControls.DriveXStick(this),
+                    BotControls.TurnStick(this),
+                    BotControls.DriveThrottle(this)
+            );
+
+            skyGary.Collecta.SpinnerControl(
+                    BotControls.SpinnerInButton(this),
+                    BotControls.SpinnerOutButton(this),
+                    BotControls.SpinnerStopButton(this)
+            );
+
+            if (gamepad2.y) {
+                if (toggleReleased) {
+                    skyGary.Collecta.ChangeArmState();
+                    toggleReleased = false;
+                }
             } else {
                 toggleReleased = true;
             }
 
-            //Pass controls to the drive control method.
-            astroGary.drive.DriveControl(
-                    BotControls.DriveYStick(this),
-                    BotControls.DriveXStick(this),
-                    BotControls.TurnStick(this),
-                    BotControls.DriveThrottle(this));
+            skyGary.Builda.BuilderControl(this,
+                    BotControls.PlateStick(this) / 2,
+                    BotControls.LifterStick(this)
+            );
 
-            astroGary.Collecta.SpinnerControl(gamepad2.x, gamepad2.b, gamepad2.a);
-
-            if (gamepad2.y && toggleReleased) {
-                togglePressed = true;
-                astroGary.Collecta.ChangeArmState();
-            }
-
-            astroGary.Builda.BuilderControl(this, gamepad2.right_bumper, gamepad2.right_stick_y);
-
-            telemetry.addData("FR Wheel: ", astroGary.drive.motorFR.getPower());
-            telemetry.addData("FL Wheel: ", astroGary.drive.motorFL.getPower());
-            telemetry.addData("BR Wheel: ", astroGary.drive.motorBR.getPower());
-            telemetry.addData("BL Wheel: ", astroGary.drive.motorBL.getPower());
-            telemetry.addData("Joe's Joint: ", astroGary.Collecta.Joint.getPosition());
-            if (astroGary.Collecta.ARM_UP) {
+            telemetry.addData("FR Wheel: ", skyGary.Drive.motorFR.getPower());
+            telemetry.addData("FL Wheel: ", skyGary.Drive.motorFL.getPower());
+            telemetry.addData("BR Wheel: ", skyGary.Drive.motorBR.getPower());
+            telemetry.addData("BL Wheel: ", skyGary.Drive.motorBL.getPower());
+            telemetry.addData("Joe's Joint: ", skyGary.Collecta.Joint.getPosition());
+            if (skyGary.Collecta.ARM_UP) {
                 telemetry.addData("Joint State", "Up and onwards");
             }
 
-            if (astroGary.Collecta.ARM_DOWN) {
+            if (skyGary.Collecta.ARM_DOWN) {
                 telemetry.addData("Joint State", "Down and backwards");
             }
-            if (astroGary.Collecta.SpinnerR.getPower() > 0) {
+            if (skyGary.Collecta.SpinnerR.getPower() > 0) {
                 telemetry.addData("Spinner", "collecting");
             }
 
-            if (astroGary.Collecta.SpinnerR.getPower() < 0) {
+            if (skyGary.Collecta.SpinnerR.getPower() < 0) {
                 telemetry.addData("Spinner", "barfing");
             }
 
-            if (astroGary.Collecta.SpinnerR.getPower() == 0) {
+            if (skyGary.Collecta.SpinnerR.getPower() == 0) {
                 telemetry.addData("Spinner", "standing still and doing nothing like a log");
             }
 

@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class BotConfig {
     //Add components to robot build
-    MecanumDrive drive = new MecanumDrive();
+    MecanumDrive Drive = new MecanumDrive();
     Collector Collecta = new Collector();
     Builder Builda = new Builder();
 
@@ -30,7 +30,8 @@ public class BotConfig {
         //myVuMark.init(myNewHWMap);
         //Finally initialize motors
 
-        drive.initAuto(myNewHWMap);
+        Drive.initAuto(myNewHWMap);
+        Drive.initGyro(myNewHWMap);
     }
     public void InitTele(HardwareMap myNewHWMap){
         //Initialize Servos first to minimize movement
@@ -39,7 +40,7 @@ public class BotConfig {
         //mySensors.initSensors(myNewHWMap);
         //Then initialize motors
 
-        drive.initTele(myNewHWMap);
+        Drive.initTele(myNewHWMap);
 
         Collecta.init(myNewHWMap);
 
@@ -56,10 +57,10 @@ public class BotConfig {
     public void InitMotors(HardwareMap myNewHWMap){
         //myGlyphLifter.initMotors(myNewHWMap);
 
-        drive.initMotors(myNewHWMap);
+        Drive.initMotors(myNewHWMap);
     }
     public void InitSensors(HardwareMap myNewHWMap){
-        drive.initGyro(myNewHWMap);
+        Drive.initGyro(myNewHWMap);
         //myVuMark.init(myNewHWMap);
     }
 
